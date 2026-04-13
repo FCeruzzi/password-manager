@@ -1,0 +1,80 @@
+name: password_manager
+description: "Password Manager - KeePass compatible"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+
+  # KDBX / KeePass format
+  kdbx: ^2.4.2
+  argon2_ffi_base: ^1.1.1
+
+  # Crypto
+  pointycastle: ^3.9.1
+  crypto: ^3.0.6
+
+  # State management
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+
+  # Navigation
+  go_router: ^14.8.1
+
+  # Storage & files
+  path_provider: ^2.1.5
+  file_picker: ^9.2.0
+  shared_preferences: ^2.5.3
+
+  # Security & biometrics
+  local_auth: ^2.3.0
+  flutter_secure_storage: ^9.2.4
+
+  # TOTP / 2FA
+  otp: ^3.1.4
+  mobile_scanner: ^7.2.0
+
+  # Cloud sync
+  googleapis: ^14.0.0
+  googleapis_auth: ^1.6.0
+  webdav_client: ^1.2.2
+
+  # UI
+  material_color_utilities: any
+  uuid: ^4.5.1
+  url_launcher: ^6.3.1
+  share_plus: ^10.1.4
+  flutter_slidable: ^3.1.1
+
+  # Utils
+  path: ^1.9.1
+
+  # Autofill
+  flutter_autofill_service: ^0.21.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  riverpod_generator: ^2.6.5
+  build_runner: ^2.4.14
+
+flutter:
+  uses-material-design: true
+  generate: true
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/to/font-from-package

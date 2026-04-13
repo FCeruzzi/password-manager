@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:password_manager/l10n/app_localizations.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import '../../core/kdbx/kdbx_service.dart';
 import '../../core/auth/auto_lock_manager.dart';
 import '../../core/providers/settings_provider.dart';
@@ -13,6 +14,12 @@ final selectedGroupProvider = StateProvider<String?>((ref) => null);
 
 /// Provider for current sort mode
 final sortModeProvider = StateProvider<SortMode>((ref) => SortMode.title);
+
+/// Provider for showing archived entries
+final showArchivedProvider = StateProvider<bool>((ref) => false);
+
+/// Provider for filtering by tag
+final selectedTagProvider = StateProvider<String?>((ref) => null);
 
 enum SortMode { title, modified, created }
 
@@ -30,11 +37,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    // Apply wakelock
+    final stayAwake = ref.read(stayAwakeProvider);
+    if (stayAwake) {
+      WakelockPlus.enable();
+    }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    WakelockPlus.disable();
     super.dispose();
   }
 
@@ -48,7 +61,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
         final elapsed = DateTime.now().difference(_pauseTime!);
         if (timeout.inSeconds > 0 && elapsed >= timeout) {
           _save();
-          ref.read(lockStateProvider.notifier).lock();
+          final autoExit = ref.read(autoExitProvider);
+          if (autoExit) {
+            SystemNavigator.pop();
+          } else {
+            ref.read(lockStateProvider.notifier).lock();
+          }
         }
       }
       _pauseTime = null;
@@ -68,6 +86,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
     final kdbxService = ref.watch(kdbxServiceProvider);
     final selectedGroup = ref.watch(selectedGroupProvider);
     final sortMode = ref.watch(sortModeProvider);
+    final showArchived = ref.watch(showArchivedProvider);
+    final selectedTag = ref.watch(selectedTagProvider);
 
     if (!kdbxService.isOpen) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -82,13 +102,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
     // Get entries for current group or all entries
     List<KdbxEntry> entries;
     String currentGroupName;
-    if (selectedGroup == null) {
+    if (showArchived) {
+      entries = kdbxService.getArchivedEntries();
+      currentGroupName = l10n.archivedEntries;
+    } else if (selectedGroup == null) {
       entries = kdbxService.getAllEntries();
       currentGroupName = l10n.allEntries;
     } else {
       final group = _findGroup(rootGroup, selectedGroup);
-      entries = group?.entries.toList() ?? [];
+      entries = (group?.entries.toList() ?? [])
+          .where((e) => !kdbxService.isArchived(e))
+          .toList();
       currentGroupName = group?.name.get() ?? l10n.allEntries;
+    }
+
+    // Filter by tag
+    if (selectedTag != null) {
+      entries = entries.where((e) {
+        final tags = kdbxService.getTags(e);
+        return tags.contains(selectedTag);
+      }).toList();
+      currentGroupName = '$currentGroupName · #$selectedTag';
     }
 
     // Sort entries
@@ -166,6 +200,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
     String? selectedGroup,
   ) {
     final colorScheme = Theme.of(context).colorScheme;
+    final kdbxService = ref.read(kdbxServiceProvider);
+    final showArchived = ref.watch(showArchivedProvider);
+    final selectedTag = ref.watch(selectedTagProvider);
+    final allTags = kdbxService.getAllTags().toList()..sort();
 
     return Drawer(
       child: SafeArea(
@@ -191,13 +229,66 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
             ListTile(
               leading: const Icon(Icons.list_alt),
               title: Text(l10n.allEntries),
-              selected: selectedGroup == null,
+              selected: selectedGroup == null && !showArchived && selectedTag == null,
               onTap: () {
                 ref.read(selectedGroupProvider.notifier).state = null;
+                ref.read(showArchivedProvider.notifier).state = false;
+                ref.read(selectedTagProvider.notifier).state = null;
+                Navigator.of(context).pop();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.archive_outlined),
+              title: Text(l10n.archivedEntries),
+              selected: showArchived,
+              trailing: Text(
+                '${kdbxService.getArchivedEntries().length}',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              onTap: () {
+                ref.read(showArchivedProvider.notifier).state = true;
+                ref.read(selectedGroupProvider.notifier).state = null;
+                ref.read(selectedTagProvider.notifier).state = null;
                 Navigator.of(context).pop();
               },
             ),
             const Divider(),
+            // Tags section
+            if (allTags.isNotEmpty) ...[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                child: Row(
+                  children: [
+                    Text(l10n.tags, style: Theme.of(context).textTheme.titleSmall),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 36,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  itemCount: allTags.length,
+                  itemBuilder: (context, index) {
+                    final tag = allTags[index];
+                    final isSelected = selectedTag == tag;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: FilterChip(
+                        label: Text(tag),
+                        selected: isSelected,
+                        onSelected: (selected) {
+                          ref.read(selectedTagProvider.notifier).state = selected ? tag : null;
+                          ref.read(showArchivedProvider.notifier).state = false;
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const Divider(),
+            ],
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Row(

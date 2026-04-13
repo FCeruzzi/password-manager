@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:password_manager/l10n/app_localizations.dart';
 import '../../core/auth/auth_service.dart';
@@ -57,8 +58,7 @@ class _UnlockScreenState extends ConsumerState<UnlockScreen> {
     if (!kdbxService.isOpen) {
       // No file open — go to vault selector
       if (mounted) {
-        // ignore: use_build_context_synchronously
-        Navigator.of(context).pushReplacementNamed('/vault');
+        context.go('/vault');
       }
       return;
     }
@@ -84,9 +84,11 @@ class _UnlockScreenState extends ConsumerState<UnlockScreen> {
         await ref.read(authServiceProvider).storeMasterPasswordForQuickUnlock(password);
       }
     } catch (e) {
-      setState(() {
-        _error = AppLocalizations.of(context)!.wrongPassword;
-      });
+      if (mounted) {
+        setState(() {
+          _error = AppLocalizations.of(context)!.wrongPassword;
+        });
+      }
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }

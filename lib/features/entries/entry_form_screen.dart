@@ -32,6 +32,8 @@ class _EntryFormScreenState extends ConsumerState<EntryFormScreen> {
   bool _obscurePassword = true;
   final _customFields = <_CustomField>[];
   String? _selectedGroupUuid;
+  List<String> _tags = [];
+  final _tagController = TextEditingController();
 
   @override
   void initState() {
@@ -66,6 +68,7 @@ class _EntryFormScreenState extends ConsumerState<EntryFormScreen> {
       KdbxKeyCommon.URL.key,
       'Notes',
       'otp', 'OTPAuth', 'TOTP Seed', 'TOTP Settings',
+      '_pm_archived',
     };
 
     for (final entry2 in entry.stringEntries) {
@@ -77,6 +80,9 @@ class _EntryFormScreenState extends ConsumerState<EntryFormScreen> {
         ));
       }
     }
+
+    // Load tags
+    _tags = kdbxService.getTags(entry);
 
     _selectedGroupUuid = entry.parent?.uuid.uuid;
   }
@@ -139,6 +145,9 @@ class _EntryFormScreenState extends ConsumerState<EntryFormScreen> {
       kdbxService.setTotpUri(entry, _totpController.text.trim());
     }
 
+    // Handle tags
+    kdbxService.setTags(entry, _tags);
+
     await kdbxService.save();
 
     if (mounted) {
@@ -157,6 +166,14 @@ class _EntryFormScreenState extends ConsumerState<EntryFormScreen> {
       if (found != null) return found;
     }
     return null;
+  }
+
+  void _addTag(String tag) {
+    final trimmed = tag.trim();
+    if (trimmed.isNotEmpty && !_tags.contains(trimmed)) {
+      setState(() => _tags.add(trimmed));
+    }
+    _tagController.clear();
   }
 
   void _generatePassword() {
@@ -208,6 +225,7 @@ class _EntryFormScreenState extends ConsumerState<EntryFormScreen> {
     _urlController.dispose();
     _notesController.dispose();
     _totpController.dispose();
+    _tagController.dispose();
     for (final cf in _customFields) {
       cf.nameController.dispose();
       cf.valueController.dispose();
@@ -326,6 +344,47 @@ class _EntryFormScreenState extends ConsumerState<EntryFormScreen> {
                       hintText: 'otpauth://totp/...',
                       prefixIcon: const Icon(Icons.qr_code),
                     ),
+                  ),
+                ),
+              ],
+            ),
+
+            // Tags
+            ExpansionTile(
+              title: Text(l10n.tags),
+              leading: const Icon(Icons.label),
+              initiallyExpanded: _tags.isNotEmpty,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Wrap(
+                    spacing: 8,
+                    children: _tags.map((tag) => Chip(
+                      label: Text(tag),
+                      onDeleted: () => setState(() => _tags.remove(tag)),
+                    )).toList(),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _tagController,
+                          decoration: InputDecoration(
+                            labelText: l10n.addTag,
+                            isDense: true,
+                            prefixIcon: const Icon(Icons.new_label, size: 20),
+                          ),
+                          onSubmitted: _addTag,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: () => _addTag(_tagController.text),
+                      ),
+                    ],
                   ),
                 ),
               ],

@@ -9,6 +9,10 @@ const _kClipboardClearDelay = 'clipboard_clear_delay';
 const _kBiometricEnabled = 'biometric_enabled';
 const _kRecentFiles = 'recent_files';
 const _kOnboardingComplete = 'onboarding_complete';
+const _kStayAwake = 'stay_awake';
+const _kAllowScreenshots = 'allow_screenshots';
+const _kAutoExit = 'auto_exit';
+const _kLocale = 'locale';
 
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError('Must be overridden in main');
@@ -164,5 +168,99 @@ class OnboardingCompleteNotifier extends StateNotifier<bool> {
   void setComplete() {
     state = true;
     _prefs?.setBool(_kOnboardingComplete, true);
+  }
+}
+
+// Stay Awake
+final stayAwakeProvider = StateNotifierProvider<StayAwakeNotifier, bool>((ref) {
+  try {
+    final prefs = ref.watch(sharedPreferencesProvider);
+    return StayAwakeNotifier(prefs);
+  } catch (_) {
+    return StayAwakeNotifier(null);
+  }
+});
+
+class StayAwakeNotifier extends StateNotifier<bool> {
+  final SharedPreferences? _prefs;
+
+  StayAwakeNotifier(this._prefs) : super(_prefs?.getBool(_kStayAwake) ?? false);
+
+  void setEnabled(bool enabled) {
+    state = enabled;
+    _prefs?.setBool(_kStayAwake, enabled);
+  }
+}
+
+// Allow Screenshots
+final allowScreenshotsProvider = StateNotifierProvider<AllowScreenshotsNotifier, bool>((ref) {
+  try {
+    final prefs = ref.watch(sharedPreferencesProvider);
+    return AllowScreenshotsNotifier(prefs);
+  } catch (_) {
+    return AllowScreenshotsNotifier(null);
+  }
+});
+
+class AllowScreenshotsNotifier extends StateNotifier<bool> {
+  final SharedPreferences? _prefs;
+
+  AllowScreenshotsNotifier(this._prefs) : super(_prefs?.getBool(_kAllowScreenshots) ?? false);
+
+  void setEnabled(bool enabled) {
+    state = enabled;
+    _prefs?.setBool(_kAllowScreenshots, enabled);
+  }
+}
+
+// Auto Exit
+final autoExitProvider = StateNotifierProvider<AutoExitNotifier, bool>((ref) {
+  try {
+    final prefs = ref.watch(sharedPreferencesProvider);
+    return AutoExitNotifier(prefs);
+  } catch (_) {
+    return AutoExitNotifier(null);
+  }
+});
+
+class AutoExitNotifier extends StateNotifier<bool> {
+  final SharedPreferences? _prefs;
+
+  AutoExitNotifier(this._prefs) : super(_prefs?.getBool(_kAutoExit) ?? false);
+
+  void setEnabled(bool enabled) {
+    state = enabled;
+    _prefs?.setBool(_kAutoExit, enabled);
+  }
+}
+
+// Locale
+final localeProvider = StateNotifierProvider<LocaleNotifier, Locale?>((ref) {
+  try {
+    final prefs = ref.watch(sharedPreferencesProvider);
+    return LocaleNotifier(prefs);
+  } catch (_) {
+    return LocaleNotifier(null);
+  }
+});
+
+class LocaleNotifier extends StateNotifier<Locale?> {
+  final SharedPreferences? _prefs;
+
+  LocaleNotifier(this._prefs) : super(_loadLocale(_prefs));
+
+  static Locale? _loadLocale(SharedPreferences? prefs) {
+    final code = prefs?.getString(_kLocale);
+    if (code == null || code.isEmpty) return null;
+    return Locale(code);
+  }
+
+  void setLocale(Locale? locale) {
+    state = locale;
+    if (locale == null) {
+      _prefs?.remove(_kLocale);
+    } else {
+      _prefs?.setString(_kLocale, locale.languageCode);
+    }
   }
 }

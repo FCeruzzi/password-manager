@@ -5,8 +5,14 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'app_localizations_ar.dart';
+import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
+import 'app_localizations_es.dart';
+import 'app_localizations_fr.dart';
 import 'app_localizations_it.dart';
+import 'app_localizations_ru.dart';
+import 'app_localizations_zh.dart';
 
 // ignore_for_file: type=lint
 
@@ -94,8 +100,14 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('ar'),
+    Locale('de'),
     Locale('en'),
+    Locale('es'),
+    Locale('fr'),
     Locale('it'),
+    Locale('ru'),
+    Locale('zh'),
   ];
 
   /// No description provided for @appTitle.
@@ -151,6 +163,18 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Usa la tua impronta digitale per sbloccare'**
   String get biometricPromptSubtitle;
+
+  /// No description provided for @biometricFailed.
+  ///
+  /// In it, this message translates to:
+  /// **'Autenticazione biometrica fallita'**
+  String get biometricFailed;
+
+  /// No description provided for @enterPasswordForBiometric.
+  ///
+  /// In it, this message translates to:
+  /// **'Inserisci la password principale per abilitare lo sblocco biometrico'**
+  String get enterPasswordForBiometric;
 
   /// No description provided for @createDatabase.
   ///
@@ -1021,6 +1045,150 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Avanti'**
   String get next;
+
+  /// No description provided for @stayAwake.
+  ///
+  /// In it, this message translates to:
+  /// **'Mantieni schermo attivo'**
+  String get stayAwake;
+
+  /// No description provided for @stayAwakeDescription.
+  ///
+  /// In it, this message translates to:
+  /// **'Impedisce lo spegnimento dello schermo mentre l\'app è aperta'**
+  String get stayAwakeDescription;
+
+  /// No description provided for @allowScreenshots.
+  ///
+  /// In it, this message translates to:
+  /// **'Consenti screenshot'**
+  String get allowScreenshots;
+
+  /// No description provided for @allowScreenshotsDescription.
+  ///
+  /// In it, this message translates to:
+  /// **'Permette di catturare screenshot dell\'app (richiede riavvio)'**
+  String get allowScreenshotsDescription;
+
+  /// No description provided for @autoExit.
+  ///
+  /// In it, this message translates to:
+  /// **'Auto uscita'**
+  String get autoExit;
+
+  /// No description provided for @autoExitDescription.
+  ///
+  /// In it, this message translates to:
+  /// **'Chiude l\'app invece di bloccarla dopo il timeout di inattività'**
+  String get autoExitDescription;
+
+  /// No description provided for @systemDefault.
+  ///
+  /// In it, this message translates to:
+  /// **'Predefinito di sistema'**
+  String get systemDefault;
+
+  /// No description provided for @archive.
+  ///
+  /// In it, this message translates to:
+  /// **'Archivia'**
+  String get archive;
+
+  /// No description provided for @unarchive.
+  ///
+  /// In it, this message translates to:
+  /// **'Ripristina'**
+  String get unarchive;
+
+  /// No description provided for @archivedEntries.
+  ///
+  /// In it, this message translates to:
+  /// **'Archiviate'**
+  String get archivedEntries;
+
+  /// No description provided for @archiveConfirm.
+  ///
+  /// In it, this message translates to:
+  /// **'Sei sicuro di voler archiviare questa voce?'**
+  String get archiveConfirm;
+
+  /// No description provided for @unarchiveConfirm.
+  ///
+  /// In it, this message translates to:
+  /// **'Sei sicuro di voler ripristinare questa voce?'**
+  String get unarchiveConfirm;
+
+  /// No description provided for @tags.
+  ///
+  /// In it, this message translates to:
+  /// **'Etichette'**
+  String get tags;
+
+  /// No description provided for @addTag.
+  ///
+  /// In it, this message translates to:
+  /// **'Aggiungi etichetta'**
+  String get addTag;
+
+  /// No description provided for @filterByTag.
+  ///
+  /// In it, this message translates to:
+  /// **'Filtra per etichetta'**
+  String get filterByTag;
+
+  /// No description provided for @noTags.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessuna etichetta'**
+  String get noTags;
+
+  /// No description provided for @exportCsv.
+  ///
+  /// In it, this message translates to:
+  /// **'Esporta CSV'**
+  String get exportCsv;
+
+  /// No description provided for @exportPdf.
+  ///
+  /// In it, this message translates to:
+  /// **'Esporta PDF'**
+  String get exportPdf;
+
+  /// No description provided for @printEntry.
+  ///
+  /// In it, this message translates to:
+  /// **'Stampa'**
+  String get printEntry;
+
+  /// No description provided for @exportAllPdf.
+  ///
+  /// In it, this message translates to:
+  /// **'Esporta tutto in PDF'**
+  String get exportAllPdf;
+
+  /// No description provided for @csvFormatError.
+  ///
+  /// In it, this message translates to:
+  /// **'Formato CSV non valido'**
+  String get csvFormatError;
+
+  /// No description provided for @csvExportSuccess.
+  ///
+  /// In it, this message translates to:
+  /// **'CSV esportato con successo'**
+  String get csvExportSuccess;
+
+  /// No description provided for @pdfExportSuccess.
+  ///
+  /// In it, this message translates to:
+  /// **'PDF esportato con successo'**
+  String get pdfExportSuccess;
+
+  /// No description provided for @group.
+  ///
+  /// In it, this message translates to:
+  /// **'Gruppo'**
+  String get group;
 }
 
 class _AppLocalizationsDelegate
@@ -1033,8 +1201,16 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'it'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+    'ar',
+    'de',
+    'en',
+    'es',
+    'fr',
+    'it',
+    'ru',
+    'zh',
+  ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -1043,10 +1219,22 @@ class _AppLocalizationsDelegate
 AppLocalizations lookupAppLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'ar':
+      return AppLocalizationsAr();
+    case 'de':
+      return AppLocalizationsDe();
     case 'en':
       return AppLocalizationsEn();
+    case 'es':
+      return AppLocalizationsEs();
+    case 'fr':
+      return AppLocalizationsFr();
     case 'it':
       return AppLocalizationsIt();
+    case 'ru':
+      return AppLocalizationsRu();
+    case 'zh':
+      return AppLocalizationsZh();
   }
 
   throw FlutterError(

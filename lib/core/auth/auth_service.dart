@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:local_auth/local_auth.dart';
@@ -39,7 +40,8 @@ class AuthService {
           biometricOnly: true,
         ),
       );
-    } on PlatformException {
+    } on PlatformException catch (e) {
+      debugPrint('Biometric auth failed: $e');
       return false;
     }
   }

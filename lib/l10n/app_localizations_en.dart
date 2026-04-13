@@ -36,6 +36,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get biometricPromptSubtitle => 'Use your fingerprint to unlock';
 
   @override
+  String get biometricFailed => 'Biometric authentication failed';
+
+  @override
+  String get enterPasswordForBiometric =>
+      'Enter master password to enable biometric unlock';
+
+  @override
   String get createDatabase => 'Create new database';
 
   @override
@@ -485,4 +492,80 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get next => 'Next';
+
+  @override
+  String get stayAwake => 'Keep screen on';
+
+  @override
+  String get stayAwakeDescription =>
+      'Prevents the screen from turning off while the app is open';
+
+  @override
+  String get allowScreenshots => 'Allow screenshots';
+
+  @override
+  String get allowScreenshotsDescription =>
+      'Allow capturing screenshots of the app (requires restart)';
+
+  @override
+  String get autoExit => 'Auto exit';
+
+  @override
+  String get autoExitDescription =>
+      'Closes the app instead of locking it after inactivity timeout';
+
+  @override
+  String get systemDefault => 'System default';
+
+  @override
+  String get archive => 'Archive';
+
+  @override
+  String get unarchive => 'Unarchive';
+
+  @override
+  String get archivedEntries => 'Archived';
+
+  @override
+  String get archiveConfirm => 'Are you sure you want to archive this entry?';
+
+  @override
+  String get unarchiveConfirm =>
+      'Are you sure you want to unarchive this entry?';
+
+  @override
+  String get tags => 'Tags';
+
+  @override
+  String get addTag => 'Add tag';
+
+  @override
+  String get filterByTag => 'Filter by tag';
+
+  @override
+  String get noTags => 'No tags';
+
+  @override
+  String get exportCsv => 'Export CSV';
+
+  @override
+  String get exportPdf => 'Export PDF';
+
+  @override
+  String get printEntry => 'Print';
+
+  @override
+  String get exportAllPdf => 'Export all to PDF';
+
+  @override
+  String get csvFormatError => 'Invalid CSV format';
+
+  @override
+  String get csvExportSuccess => 'CSV exported successfully';
+
+  @override
+  String get pdfExportSuccess => 'PDF exported successfully';
+
+  @override
+  String get group => 'Group';
 }

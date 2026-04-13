@@ -8,6 +8,7 @@ import 'package:otp/otp.dart';
 import 'dart:async';
 import '../../core/kdbx/kdbx_service.dart';
 import '../../core/providers/settings_provider.dart';
+import '../../core/pdf/pdf_service.dart';
 
 class EntryDetailScreen extends ConsumerStatefulWidget {
   final String entryUuid;
@@ -140,6 +141,7 @@ class _EntryDetailScreenState extends ConsumerState<EntryDetailScreen> {
       KdbxKeyCommon.URL.key,
       'Notes',
       'otp', 'OTPAuth', 'TOTP Seed', 'TOTP Settings',
+      '_pm_archived',
     };
     final customFields = entry.stringEntries
         .where((e) => !standardKeys.contains(e.key.key))
@@ -163,24 +165,51 @@ class _EntryDetailScreenState extends ConsumerState<EntryDetailScreen> {
             },
           ),
           PopupMenuButton(
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'delete',
-                child: ListTile(
-                  leading: Icon(Icons.delete, color: colorScheme.error),
-                  title: Text(l10n.delete, style: TextStyle(color: colorScheme.error)),
-                  contentPadding: EdgeInsets.zero,
+            itemBuilder: (context) {
+              final isArchived = kdbxService.isArchived(entry);
+              return [
+                PopupMenuItem(
+                  value: 'archive',
+                  child: ListTile(
+                    leading: Icon(isArchived ? Icons.unarchive : Icons.archive),
+                    title: Text(isArchived ? l10n.unarchive : l10n.archive),
+                    contentPadding: EdgeInsets.zero,
+                  ),
                 ),
-              ),
-              PopupMenuItem(
-                value: 'history',
-                child: ListTile(
-                  leading: const Icon(Icons.history),
-                  title: Text(l10n.history),
-                  contentPadding: EdgeInsets.zero,
+                PopupMenuItem(
+                  value: 'pdf',
+                  child: ListTile(
+                    leading: const Icon(Icons.picture_as_pdf),
+                    title: Text(l10n.exportPdf),
+                    contentPadding: EdgeInsets.zero,
+                  ),
                 ),
-              ),
-            ],
+                PopupMenuItem(
+                  value: 'print',
+                  child: ListTile(
+                    leading: const Icon(Icons.print),
+                    title: Text(l10n.printEntry),
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 'history',
+                  child: ListTile(
+                    leading: const Icon(Icons.history),
+                    title: Text(l10n.history),
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 'delete',
+                  child: ListTile(
+                    leading: Icon(Icons.delete, color: colorScheme.error),
+                    title: Text(l10n.delete, style: TextStyle(color: colorScheme.error)),
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ),
+              ];
+            },
             onSelected: (value) async {
               if (value == 'delete') {
                 final confirm = await showDialog<bool>(
@@ -210,6 +239,19 @@ class _EntryDetailScreenState extends ConsumerState<EntryDetailScreen> {
                 }
               } else if (value == 'history') {
                 _showHistory(context, entry);
+              } else if (value == 'archive') {
+                final isArchived = kdbxService.isArchived(entry);
+                if (isArchived) {
+                  kdbxService.unarchiveEntry(entry);
+                } else {
+                  kdbxService.archiveEntry(entry);
+                }
+                await kdbxService.save();
+                if (mounted) context.go('/home');
+              } else if (value == 'pdf') {
+                await PdfService.exportEntryPdf(entry, kdbxService);
+              } else if (value == 'print') {
+                await PdfService.printEntry(entry, kdbxService);
               }
             },
           ),
@@ -313,6 +355,23 @@ class _EntryDetailScreenState extends ConsumerState<EntryDetailScreen> {
                   onPressed: () => _copyField(_totpCode, l10n.totp),
                 ),
               ),
+            ),
+          ],
+
+          // Tags
+          if (kdbxService.getTags(entry).isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+              child: Text(l10n.tags, style: Theme.of(context).textTheme.titleMedium),
+            ),
+            Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              children: kdbxService.getTags(entry).map((tag) => Chip(
+                label: Text(tag),
+                avatar: const Icon(Icons.label, size: 16),
+              )).toList(),
             ),
           ],
 

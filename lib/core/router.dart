@@ -40,6 +40,10 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       // Flusso normale lock/unlock (solo dopo onboarding)
       if (onboardingComplete) {
+        // Se sei su unlock ma non c'è nessun file aperto, vai al vault selector
+        if (isOnUnlock && !kdbxService.isOpen) {
+          return '/vault';
+        }
         if (lockState && !isOnUnlock && !isOnVault) {
           if (kdbxService.isOpen) return '/unlock';
           return '/vault';

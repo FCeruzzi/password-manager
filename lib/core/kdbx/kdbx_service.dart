@@ -236,11 +236,14 @@ class KdbxService {
   }
 
   // Get all entries flat
-  List<KdbxEntry> getAllEntries() {
+  List<KdbxEntry> getAllEntries({bool includeArchived = false}) {
     if (_currentFile == null) return [];
     final results = <KdbxEntry>[];
     void collect(KdbxGroup group) {
-      results.addAll(group.entries);
+      for (final entry in group.entries) {
+        if (!includeArchived && isArchived(entry)) continue;
+        results.add(entry);
+      }
       for (final sub in group.groups) {
         collect(sub);
       }
@@ -270,5 +273,46 @@ class KdbxService {
     final mergeContext = _currentFile!.merge(remote);
     _isDirty = true;
     return mergeContext;
+  }
+
+  // Archive support (uses hidden custom field)
+  static final _archivedKey = KdbxKey('_pm_archived');
+
+  bool isArchived(KdbxEntry entry) {
+    return entry.getString(_archivedKey)?.getText() == 'true';
+  }
+
+  void archiveEntry(KdbxEntry entry) {
+    entry.setString(_archivedKey, PlainValue('true'));
+    _isDirty = true;
+  }
+
+  void unarchiveEntry(KdbxEntry entry) {
+    entry.removeString(_archivedKey);
+    _isDirty = true;
+  }
+
+  List<KdbxEntry> getArchivedEntries() {
+    return getAllEntries(includeArchived: true).where(isArchived).toList();
+  }
+
+  // Tags support (uses KDBX native tags field, comma-separated)
+  List<String> getTags(KdbxEntry entry) {
+    final raw = entry.tags.get();
+    if (raw == null || raw.isEmpty) return [];
+    return raw.split(',').map((t) => t.trim()).where((t) => t.isNotEmpty).toList();
+  }
+
+  void setTags(KdbxEntry entry, List<String> tags) {
+    entry.tags.set(tags.join(','));
+    _isDirty = true;
+  }
+
+  Set<String> getAllTags() {
+    final tags = <String>{};
+    for (final entry in getAllEntries(includeArchived: true)) {
+      tags.addAll(getTags(entry));
+    }
+    return tags;
   }
 }

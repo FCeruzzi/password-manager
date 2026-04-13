@@ -37,6 +37,13 @@ class AppLocalizationsIt extends AppLocalizations {
       'Usa la tua impronta digitale per sbloccare';
 
   @override
+  String get biometricFailed => 'Autenticazione biometrica fallita';
+
+  @override
+  String get enterPasswordForBiometric =>
+      'Inserisci la password principale per abilitare lo sblocco biometrico';
+
+  @override
   String get createDatabase => 'Crea nuovo database';
 
   @override
@@ -485,4 +492,80 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get next => 'Avanti';
+
+  @override
+  String get stayAwake => 'Mantieni schermo attivo';
+
+  @override
+  String get stayAwakeDescription =>
+      'Impedisce lo spegnimento dello schermo mentre l\'app è aperta';
+
+  @override
+  String get allowScreenshots => 'Consenti screenshot';
+
+  @override
+  String get allowScreenshotsDescription =>
+      'Permette di catturare screenshot dell\'app (richiede riavvio)';
+
+  @override
+  String get autoExit => 'Auto uscita';
+
+  @override
+  String get autoExitDescription =>
+      'Chiude l\'app invece di bloccarla dopo il timeout di inattività';
+
+  @override
+  String get systemDefault => 'Predefinito di sistema';
+
+  @override
+  String get archive => 'Archivia';
+
+  @override
+  String get unarchive => 'Ripristina';
+
+  @override
+  String get archivedEntries => 'Archiviate';
+
+  @override
+  String get archiveConfirm => 'Sei sicuro di voler archiviare questa voce?';
+
+  @override
+  String get unarchiveConfirm =>
+      'Sei sicuro di voler ripristinare questa voce?';
+
+  @override
+  String get tags => 'Etichette';
+
+  @override
+  String get addTag => 'Aggiungi etichetta';
+
+  @override
+  String get filterByTag => 'Filtra per etichetta';
+
+  @override
+  String get noTags => 'Nessuna etichetta';
+
+  @override
+  String get exportCsv => 'Esporta CSV';
+
+  @override
+  String get exportPdf => 'Esporta PDF';
+
+  @override
+  String get printEntry => 'Stampa';
+
+  @override
+  String get exportAllPdf => 'Esporta tutto in PDF';
+
+  @override
+  String get csvFormatError => 'Formato CSV non valido';
+
+  @override
+  String get csvExportSuccess => 'CSV esportato con successo';
+
+  @override
+  String get pdfExportSuccess => 'PDF esportato con successo';
+
+  @override
+  String get group => 'Gruppo';
 }

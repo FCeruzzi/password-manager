@@ -13,6 +13,7 @@ class PasswordManagerApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
     final themeMode = ref.watch(themeModeProvider);
+    final locale = ref.watch(localeProvider);
 
     return MaterialApp.router(
       title: 'Password Manager',
@@ -29,8 +30,14 @@ class PasswordManagerApp extends ConsumerWidget {
       supportedLocales: const [
         Locale('it'),
         Locale('en'),
+        Locale('fr'),
+        Locale('de'),
+        Locale('es'),
+        Locale('zh'),
+        Locale('ru'),
+        Locale('ar'),
       ],
-      locale: const Locale('it'),
+      locale: locale ?? const Locale('it'),
       routerConfig: router,
     );
   }

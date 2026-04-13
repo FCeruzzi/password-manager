@@ -105,13 +105,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       localizedReason: l10n.biometricPromptSubtitle,
     );
 
-    if (authenticated && mounted) {
-      ref.read(biometricEnabledProvider.notifier).setEnabled(true);
+    if (!mounted) return;
+
+    if (authenticated) {
       if (_masterPassword != null) {
         await authService.storeMasterPasswordForQuickUnlock(_masterPassword!);
       }
+      ref.read(biometricEnabledProvider.notifier).setEnabled(true);
       setState(() => _biometricEnabled = true);
       await _createDatabaseAndFinish();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.biometricFailed)),
+      );
     }
   }
 

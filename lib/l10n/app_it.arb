@@ -157,5 +157,21 @@
   "no": "No",
   "loading": "Caricamento...",
   "about": "Informazioni",
-  "version": "Versione"
+  "version": "Versione",
+  "welcomeTitle": "Benvenuto in Password Manager",
+  "welcomeSubtitle": "Le tue password, al sicuro e sempre con te",
+  "welcomeDescription": "Password Manager usa il formato KeePass per conservare in modo sicuro le tue credenziali, carte di credito e note — tutto crittografato sul tuo dispositivo.",
+  "getStarted": "Inizia",
+  "masterPasswordExplanationTitle": "La tua Password Principale",
+  "masterPasswordExplanation": "La password principale è l'unica password che dovrai ricordare. Protegge tutti i tuoi dati con una crittografia forte.",
+  "masterPasswordWarning": "Se dimentichi questa password, i tuoi dati saranno persi per sempre. Non è possibile recuperarla in alcun modo.",
+  "createYourPassword": "Crea la tua password",
+  "onboardingBiometricTitle": "Sblocco rapido",
+  "onboardingBiometricDescription": "Abilita lo sblocco biometrico per accedere al tuo vault rapidamente con l'impronta digitale, senza digitare ogni volta la password principale.",
+  "enableBiometric": "Abilita",
+  "skipForNow": "Salta per ora",
+  "onboardingCompleteTitle": "Tutto pronto!",
+  "onboardingCompleteDescription": "Il tuo vault è pronto. Inizia ad aggiungere le tue password e credenziali.",
+  "letsGo": "Vai al tuo vault",
+  "next": "Avanti"
 }

@@ -432,4 +432,57 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get version => 'Versione';
+
+  @override
+  String get welcomeTitle => 'Benvenuto in Password Manager';
+
+  @override
+  String get welcomeSubtitle => 'Le tue password, al sicuro e sempre con te';
+
+  @override
+  String get welcomeDescription =>
+      'Password Manager usa il formato KeePass per conservare in modo sicuro le tue credenziali, carte di credito e note — tutto crittografato sul tuo dispositivo.';
+
+  @override
+  String get getStarted => 'Inizia';
+
+  @override
+  String get masterPasswordExplanationTitle => 'La tua Password Principale';
+
+  @override
+  String get masterPasswordExplanation =>
+      'La password principale è l\'unica password che dovrai ricordare. Protegge tutti i tuoi dati con una crittografia forte.';
+
+  @override
+  String get masterPasswordWarning =>
+      'Se dimentichi questa password, i tuoi dati saranno persi per sempre. Non è possibile recuperarla in alcun modo.';
+
+  @override
+  String get createYourPassword => 'Crea la tua password';
+
+  @override
+  String get onboardingBiometricTitle => 'Sblocco rapido';
+
+  @override
+  String get onboardingBiometricDescription =>
+      'Abilita lo sblocco biometrico per accedere al tuo vault rapidamente con l\'impronta digitale, senza digitare ogni volta la password principale.';
+
+  @override
+  String get enableBiometric => 'Abilita';
+
+  @override
+  String get skipForNow => 'Salta per ora';
+
+  @override
+  String get onboardingCompleteTitle => 'Tutto pronto!';
+
+  @override
+  String get onboardingCompleteDescription =>
+      'Il tuo vault è pronto. Inizia ad aggiungere le tue password e credenziali.';
+
+  @override
+  String get letsGo => 'Vai al tuo vault';
+
+  @override
+  String get next => 'Avanti';
 }

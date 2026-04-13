@@ -8,6 +8,7 @@ const _kAutoLockTimeout = 'auto_lock_timeout';
 const _kClipboardClearDelay = 'clipboard_clear_delay';
 const _kBiometricEnabled = 'biometric_enabled';
 const _kRecentFiles = 'recent_files';
+const _kOnboardingComplete = 'onboarding_complete';
 
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError('Must be overridden in main');
@@ -143,5 +144,25 @@ class RecentFilesNotifier extends StateNotifier<List<String>> {
     files.remove(filePath);
     state = files;
     _prefs?.setStringList(_kRecentFiles, files);
+  }
+}
+
+final onboardingCompleteProvider = StateNotifierProvider<OnboardingCompleteNotifier, bool>((ref) {
+  try {
+    final prefs = ref.watch(sharedPreferencesProvider);
+    return OnboardingCompleteNotifier(prefs);
+  } catch (_) {
+    return OnboardingCompleteNotifier(null);
+  }
+});
+
+class OnboardingCompleteNotifier extends StateNotifier<bool> {
+  final SharedPreferences? _prefs;
+
+  OnboardingCompleteNotifier(this._prefs) : super(_prefs?.getBool(_kOnboardingComplete) ?? false);
+
+  void setComplete() {
+    state = true;
+    _prefs?.setBool(_kOnboardingComplete, true);
   }
 }

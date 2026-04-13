@@ -157,5 +157,21 @@
   "no": "No",
   "loading": "Loading...",
   "about": "About",
-  "version": "Version"
+  "version": "Version",
+  "welcomeTitle": "Welcome to Password Manager",
+  "welcomeSubtitle": "Your passwords, safe and always with you",
+  "welcomeDescription": "Password Manager uses the KeePass format to securely store your credentials, credit cards, and secure notes — all encrypted on your device.",
+  "getStarted": "Get Started",
+  "masterPasswordExplanationTitle": "Your Master Password",
+  "masterPasswordExplanation": "The master password is the only password you need to remember. It protects all your data with strong encryption.",
+  "masterPasswordWarning": "If you forget this password, your data will be lost forever. There is no way to recover it.",
+  "createYourPassword": "Create your password",
+  "onboardingBiometricTitle": "Quick Unlock",
+  "onboardingBiometricDescription": "Enable biometric unlock to access your vault quickly with your fingerprint, without typing the master password every time.",
+  "enableBiometric": "Enable",
+  "skipForNow": "Skip for now",
+  "onboardingCompleteTitle": "All set!",
+  "onboardingCompleteDescription": "Your vault is ready. Start adding your passwords and credentials.",
+  "letsGo": "Go to your vault",
+  "next": "Next"
 }

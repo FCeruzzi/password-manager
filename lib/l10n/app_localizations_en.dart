@@ -432,4 +432,57 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get version => 'Version';
+
+  @override
+  String get welcomeTitle => 'Welcome to Password Manager';
+
+  @override
+  String get welcomeSubtitle => 'Your passwords, safe and always with you';
+
+  @override
+  String get welcomeDescription =>
+      'Password Manager uses the KeePass format to securely store your credentials, credit cards, and secure notes — all encrypted on your device.';
+
+  @override
+  String get getStarted => 'Get Started';
+
+  @override
+  String get masterPasswordExplanationTitle => 'Your Master Password';
+
+  @override
+  String get masterPasswordExplanation =>
+      'The master password is the only password you need to remember. It protects all your data with strong encryption.';
+
+  @override
+  String get masterPasswordWarning =>
+      'If you forget this password, your data will be lost forever. There is no way to recover it.';
+
+  @override
+  String get createYourPassword => 'Create your password';
+
+  @override
+  String get onboardingBiometricTitle => 'Quick Unlock';
+
+  @override
+  String get onboardingBiometricDescription =>
+      'Enable biometric unlock to access your vault quickly with your fingerprint, without typing the master password every time.';
+
+  @override
+  String get enableBiometric => 'Enable';
+
+  @override
+  String get skipForNow => 'Skip for now';
+
+  @override
+  String get onboardingCompleteTitle => 'All set!';
+
+  @override
+  String get onboardingCompleteDescription =>
+      'Your vault is ready. Start adding your passwords and credentials.';
+
+  @override
+  String get letsGo => 'Go to your vault';
+
+  @override
+  String get next => 'Next';
 }

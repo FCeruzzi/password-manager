@@ -925,6 +925,102 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Versione'**
   String get version;
+
+  /// No description provided for @welcomeTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Benvenuto in Password Manager'**
+  String get welcomeTitle;
+
+  /// No description provided for @welcomeSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Le tue password, al sicuro e sempre con te'**
+  String get welcomeSubtitle;
+
+  /// No description provided for @welcomeDescription.
+  ///
+  /// In it, this message translates to:
+  /// **'Password Manager usa il formato KeePass per conservare in modo sicuro le tue credenziali, carte di credito e note — tutto crittografato sul tuo dispositivo.'**
+  String get welcomeDescription;
+
+  /// No description provided for @getStarted.
+  ///
+  /// In it, this message translates to:
+  /// **'Inizia'**
+  String get getStarted;
+
+  /// No description provided for @masterPasswordExplanationTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'La tua Password Principale'**
+  String get masterPasswordExplanationTitle;
+
+  /// No description provided for @masterPasswordExplanation.
+  ///
+  /// In it, this message translates to:
+  /// **'La password principale è l\'unica password che dovrai ricordare. Protegge tutti i tuoi dati con una crittografia forte.'**
+  String get masterPasswordExplanation;
+
+  /// No description provided for @masterPasswordWarning.
+  ///
+  /// In it, this message translates to:
+  /// **'Se dimentichi questa password, i tuoi dati saranno persi per sempre. Non è possibile recuperarla in alcun modo.'**
+  String get masterPasswordWarning;
+
+  /// No description provided for @createYourPassword.
+  ///
+  /// In it, this message translates to:
+  /// **'Crea la tua password'**
+  String get createYourPassword;
+
+  /// No description provided for @onboardingBiometricTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Sblocco rapido'**
+  String get onboardingBiometricTitle;
+
+  /// No description provided for @onboardingBiometricDescription.
+  ///
+  /// In it, this message translates to:
+  /// **'Abilita lo sblocco biometrico per accedere al tuo vault rapidamente con l\'impronta digitale, senza digitare ogni volta la password principale.'**
+  String get onboardingBiometricDescription;
+
+  /// No description provided for @enableBiometric.
+  ///
+  /// In it, this message translates to:
+  /// **'Abilita'**
+  String get enableBiometric;
+
+  /// No description provided for @skipForNow.
+  ///
+  /// In it, this message translates to:
+  /// **'Salta per ora'**
+  String get skipForNow;
+
+  /// No description provided for @onboardingCompleteTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Tutto pronto!'**
+  String get onboardingCompleteTitle;
+
+  /// No description provided for @onboardingCompleteDescription.
+  ///
+  /// In it, this message translates to:
+  /// **'Il tuo vault è pronto. Inizia ad aggiungere le tue password e credenziali.'**
+  String get onboardingCompleteDescription;
+
+  /// No description provided for @letsGo.
+  ///
+  /// In it, this message translates to:
+  /// **'Vai al tuo vault'**
+  String get letsGo;
+
+  /// No description provided for @next.
+  ///
+  /// In it, this message translates to:
+  /// **'Avanti'**
+  String get next;
 }
 
 class _AppLocalizationsDelegate

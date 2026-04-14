@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,13 +22,40 @@ class _UnlockScreenState extends ConsumerState<UnlockScreen> {
   bool _obscurePassword = true;
   bool _isLoading = false;
   String? _error;
+  String? _recentFilePath;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _tryBiometricUnlock();
+      _resolveDatabase();
     });
+  }
+
+  /// Trova il database da sbloccare: usa quello già aperto, oppure il più recente.
+  void _resolveDatabase() {
+    final kdbxService = ref.read(kdbxServiceProvider);
+
+    if (kdbxService.isOpen) {
+      // Database già caricato, prova il biometrico
+      _tryBiometricUnlock();
+      return;
+    }
+
+    // Cerca il database più recente che esiste su disco
+    final recentFiles = ref.read(recentFilesProvider);
+    for (final path in recentFiles) {
+      if (File(path).existsSync()) {
+        setState(() => _recentFilePath = path);
+        _tryBiometricUnlock();
+        return;
+      }
+    }
+
+    // Nessun database trovato, vai al vault selector
+    if (mounted) {
+      context.go('/vault');
+    }
   }
 
   Future<void> _tryBiometricUnlock() async {
@@ -55,11 +83,13 @@ class _UnlockScreenState extends ConsumerState<UnlockScreen> {
   Future<void> _unlockWithPassword(String password) async {
     final kdbxService = ref.read(kdbxServiceProvider);
 
-    if (!kdbxService.isOpen) {
-      // No file open — go to vault selector
-      if (mounted) {
-        context.go('/vault');
-      }
+    // Determina il percorso del file: database già aperto o recente
+    final filePath = kdbxService.isOpen
+        ? kdbxService.currentFilePath
+        : _recentFilePath;
+
+    if (filePath == null) {
+      if (mounted) context.go('/vault');
       return;
     }
 
@@ -69,12 +99,8 @@ class _UnlockScreenState extends ConsumerState<UnlockScreen> {
     });
 
     try {
-      // Re-open the file with credentials to verify password
-      final filePath = kdbxService.currentFilePath;
-      if (filePath != null) {
-        final credentials = Credentials(ProtectedValue.fromString(password));
-        await kdbxService.openFile(filePath: filePath, credentials: credentials);
-      }
+      final credentials = Credentials(ProtectedValue.fromString(password));
+      await kdbxService.openFile(filePath: filePath, credentials: credentials);
 
       ref.read(lockStateProvider.notifier).unlock();
 

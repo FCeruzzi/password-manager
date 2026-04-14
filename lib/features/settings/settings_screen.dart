@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kdbx/kdbx.dart';
 import 'package:password_manager/l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import '../../core/auth/auth_service.dart';
 import '../../core/auth/auto_lock_manager.dart';
@@ -249,6 +250,7 @@ class SettingsScreen extends ConsumerWidget {
             leading: const Icon(Icons.info_outline),
             title: Text(l10n.about),
             subtitle: Text('${l10n.version} 1.0.0'),
+            onTap: () => launchUrl(Uri.parse('https://fceruzzi.github.io')),
           ),
 
           // Lock
@@ -369,34 +371,70 @@ class SettingsScreen extends ConsumerWidget {
 
     final result = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.changeMasterPassword),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: currentController,
-              obscureText: true,
-              decoration: InputDecoration(labelText: l10n.currentPassword),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) {
+          final password = newController.text;
+          final strength = PasswordGenerator.calculateStrength(password);
+          final strengthColors = [
+            Colors.red, Colors.orange, Colors.yellow.shade700,
+            Colors.lightGreen, Colors.green,
+          ];
+          final strengthLabels = [
+            l10n.weak, l10n.fair, 'Buona', l10n.strong, l10n.veryStrong,
+          ];
+
+          return AlertDialog(
+            title: Text(l10n.changeMasterPassword),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: currentController,
+                  obscureText: true,
+                  decoration: InputDecoration(labelText: l10n.currentPassword),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: newController,
+                  obscureText: true,
+                  decoration: InputDecoration(labelText: l10n.newPassword),
+                  onChanged: (_) => setDialogState(() {}),
+                ),
+                if (password.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  LinearProgressIndicator(
+                    value: (strength + 1) / 5,
+                    backgroundColor: Colors.grey.shade300,
+                    valueColor: AlwaysStoppedAnimation(strengthColors[strength]),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  const SizedBox(height: 4),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '${l10n.passwordStrength}: ${strengthLabels[strength]}',
+                      style: TextStyle(
+                        color: strengthColors[strength],
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 12),
+                TextField(
+                  controller: confirmController,
+                  obscureText: true,
+                  decoration: InputDecoration(labelText: l10n.confirmMasterPassword),
+                ),
+              ],
             ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: newController,
-              obscureText: true,
-              decoration: InputDecoration(labelText: l10n.newPassword),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: confirmController,
-              obscureText: true,
-              decoration: InputDecoration(labelText: l10n.confirmMasterPassword),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text(l10n.cancel)),
-          FilledButton(onPressed: () => Navigator.of(ctx).pop(true), child: Text(l10n.save)),
-        ],
+            actions: [
+              TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text(l10n.cancel)),
+              FilledButton(onPressed: () => Navigator.of(ctx).pop(true), child: Text(l10n.save)),
+            ],
+          );
+        },
       ),
     );
 

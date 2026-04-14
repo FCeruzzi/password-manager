@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../core/auth/auto_lock_manager.dart';
@@ -18,6 +19,15 @@ final routerProvider = Provider<GoRouter>((ref) {
   final lockState = ref.watch(lockStateProvider);
   final kdbxService = ref.watch(kdbxServiceProvider);
   final onboardingComplete = ref.watch(onboardingCompleteProvider);
+  final recentFiles = ref.watch(recentFilesProvider);
+
+  // Controlla se esiste almeno un database recente su disco
+  bool hasRecentDatabase() {
+    for (final path in recentFiles) {
+      if (File(path).existsSync()) return true;
+    }
+    return false;
+  }
 
   return GoRouter(
     initialLocation: '/unlock',
@@ -34,18 +44,16 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Onboarding già fatto ma sei sulla pagina onboarding
       if (onboardingComplete && isOnOnboarding) {
         if (!lockState) return '/home';
-        if (kdbxService.isOpen) return '/unlock';
+        // Se c'è un database recente, vai a unlock direttamente
+        if (kdbxService.isOpen || hasRecentDatabase()) return '/unlock';
         return '/vault';
       }
 
       // Flusso normale lock/unlock (solo dopo onboarding)
       if (onboardingComplete) {
-        // Se sei su unlock ma non c'è nessun file aperto, vai al vault selector
-        if (isOnUnlock && !kdbxService.isOpen) {
-          return '/vault';
-        }
         if (lockState && !isOnUnlock && !isOnVault) {
-          if (kdbxService.isOpen) return '/unlock';
+          // Se c'è un database aperto o un database recente, vai a unlock
+          if (kdbxService.isOpen || hasRecentDatabase()) return '/unlock';
           return '/vault';
         }
         if (!lockState && (isOnUnlock || isOnVault)) {

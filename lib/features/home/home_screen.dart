@@ -215,7 +215,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Icon(Icons.shield_rounded, size: 48, color: colorScheme.onPrimaryContainer),
+                  Image.asset('assets/icon/app_icon.png', width: 48, height: 48),
                   const SizedBox(height: 8),
                   Text(
                     l10n.appTitle,
@@ -313,17 +313,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
                   );
                 },
               ),
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.lock_outline),
-              title: Text(l10n.unlock),
-              subtitle: const Text('Blocca'),
-              onTap: () {
-                _save();
-                ref.read(lockStateProvider.notifier).lock();
-                Navigator.of(context).pop();
-              },
             ),
           ],
         ),

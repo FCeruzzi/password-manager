@@ -43,3 +43,17 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Gradle & Kotlin caches
+.gradle/
+.kotlin/
+android/.gradle/
+android/.kotlin/
+android/build/
+android/.idea/
+
+# Build outputs & artifacts
+dist/
+
+# Flutter metadata
+.metadata

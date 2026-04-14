@@ -79,6 +79,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+  assets:
+    - assets/icon/
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:

@@ -44,9 +44,9 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
     }
   }
 
-  void setThemeMode(ThemeMode mode) {
+  Future<void> setThemeMode(ThemeMode mode) async {
     state = mode;
-    _prefs?.setString(_kThemeMode, mode.name);
+    await _prefs?.setString(_kThemeMode, mode.name);
   }
 }
 
@@ -69,9 +69,9 @@ class AutoLockTimeoutNotifier extends StateNotifier<Duration> {
     return Duration(seconds: seconds);
   }
 
-  void setTimeout(Duration timeout) {
+  Future<void> setTimeout(Duration timeout) async {
     state = timeout;
-    _prefs?.setInt(_kAutoLockTimeout, timeout.inSeconds);
+    await _prefs?.setInt(_kAutoLockTimeout, timeout.inSeconds);
   }
 }
 
@@ -94,9 +94,9 @@ class ClipboardClearDelayNotifier extends StateNotifier<Duration> {
     return Duration(seconds: seconds);
   }
 
-  void setDelay(Duration delay) {
+  Future<void> setDelay(Duration delay) async {
     state = delay;
-    _prefs?.setInt(_kClipboardClearDelay, delay.inSeconds);
+    await _prefs?.setInt(_kClipboardClearDelay, delay.inSeconds);
   }
 }
 
@@ -114,9 +114,9 @@ class BiometricEnabledNotifier extends StateNotifier<bool> {
 
   BiometricEnabledNotifier(this._prefs) : super(_prefs?.getBool(_kBiometricEnabled) ?? false);
 
-  void setEnabled(bool enabled) {
+  Future<void> setEnabled(bool enabled) async {
     state = enabled;
-    _prefs?.setBool(_kBiometricEnabled, enabled);
+    await _prefs?.setBool(_kBiometricEnabled, enabled);
   }
 }
 
@@ -134,20 +134,20 @@ class RecentFilesNotifier extends StateNotifier<List<String>> {
 
   RecentFilesNotifier(this._prefs) : super(_prefs?.getStringList(_kRecentFiles) ?? []);
 
-  void addFile(String filePath) {
+  Future<void> addFile(String filePath) async {
     final files = [...state];
     files.remove(filePath);
     files.insert(0, filePath);
     if (files.length > 10) files.removeLast();
     state = files;
-    _prefs?.setStringList(_kRecentFiles, files);
+    await _prefs?.setStringList(_kRecentFiles, files);
   }
 
-  void removeFile(String filePath) {
+  Future<void> removeFile(String filePath) async {
     final files = [...state];
     files.remove(filePath);
     state = files;
-    _prefs?.setStringList(_kRecentFiles, files);
+    await _prefs?.setStringList(_kRecentFiles, files);
   }
 }
 
@@ -165,9 +165,9 @@ class OnboardingCompleteNotifier extends StateNotifier<bool> {
 
   OnboardingCompleteNotifier(this._prefs) : super(_prefs?.getBool(_kOnboardingComplete) ?? false);
 
-  void setComplete() {
+  Future<void> setComplete() async {
     state = true;
-    _prefs?.setBool(_kOnboardingComplete, true);
+    await _prefs?.setBool(_kOnboardingComplete, true);
   }
 }
 
@@ -186,9 +186,9 @@ class StayAwakeNotifier extends StateNotifier<bool> {
 
   StayAwakeNotifier(this._prefs) : super(_prefs?.getBool(_kStayAwake) ?? false);
 
-  void setEnabled(bool enabled) {
+  Future<void> setEnabled(bool enabled) async {
     state = enabled;
-    _prefs?.setBool(_kStayAwake, enabled);
+    await _prefs?.setBool(_kStayAwake, enabled);
   }
 }
 
@@ -207,9 +207,9 @@ class AllowScreenshotsNotifier extends StateNotifier<bool> {
 
   AllowScreenshotsNotifier(this._prefs) : super(_prefs?.getBool(_kAllowScreenshots) ?? false);
 
-  void setEnabled(bool enabled) {
+  Future<void> setEnabled(bool enabled) async {
     state = enabled;
-    _prefs?.setBool(_kAllowScreenshots, enabled);
+    await _prefs?.setBool(_kAllowScreenshots, enabled);
   }
 }
 
@@ -228,9 +228,9 @@ class AutoExitNotifier extends StateNotifier<bool> {
 
   AutoExitNotifier(this._prefs) : super(_prefs?.getBool(_kAutoExit) ?? false);
 
-  void setEnabled(bool enabled) {
+  Future<void> setEnabled(bool enabled) async {
     state = enabled;
-    _prefs?.setBool(_kAutoExit, enabled);
+    await _prefs?.setBool(_kAutoExit, enabled);
   }
 }
 
@@ -255,12 +255,12 @@ class LocaleNotifier extends StateNotifier<Locale?> {
     return Locale(code);
   }
 
-  void setLocale(Locale? locale) {
+  Future<void> setLocale(Locale? locale) async {
     state = locale;
     if (locale == null) {
-      _prefs?.remove(_kLocale);
+      await _prefs?.remove(_kLocale);
     } else {
-      _prefs?.setString(_kLocale, locale.languageCode);
+      await _prefs?.setString(_kLocale, locale.languageCode);
     }
   }
 }

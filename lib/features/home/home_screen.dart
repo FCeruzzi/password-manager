@@ -215,7 +215,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Image.asset('assets/icon/app_icon.png', width: 48, height: 48),
+                  Image.asset('assets/icon/lucchetto.png', width: 48, height: 48),
                   const SizedBox(height: 8),
                   Text(
                     l10n.appTitle,

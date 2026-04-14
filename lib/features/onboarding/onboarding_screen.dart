@@ -233,7 +233,7 @@ class _WelcomePage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset('assets/icon/app_icon.png', width: 100, height: 100),
+          Image.asset('assets/icon/lucchetto.png', width: 100, height: 100),
           const SizedBox(height: 32),
           Text(
             l10n.welcomeTitle,

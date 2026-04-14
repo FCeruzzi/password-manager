@@ -151,7 +151,7 @@ class _VaultSelectorScreenState extends ConsumerState<VaultSelectorScreen> {
                       child: Column(
                         children: [
                           const SizedBox(height: 32),
-                          Image.asset('assets/icon/app_icon.png', width: 80, height: 80),
+                          Image.asset('assets/icon/lucchetto.png', width: 80, height: 80),
                           const SizedBox(height: 16),
                           Text(
                             l10n.appTitle,

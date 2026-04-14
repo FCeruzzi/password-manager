@@ -29,4 +29,10 @@ class MainActivity : FlutterFragmentActivity() {
                 }
             }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        finishAndRemoveTask()
+        android.os.Process.killProcess(android.os.Process.myPid())
+    }
 }

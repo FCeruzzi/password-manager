@@ -13,8 +13,21 @@ Future<void> _applyScreenshotPolicy(bool allow) async {
   } catch (_) {}
 }
 
+class _AppLifecycleObserver extends WidgetsBindingObserver {
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.detached) {
+      SystemNavigator.pop();
+    }
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  final observer = _AppLifecycleObserver();
+  WidgetsBinding.instance.addObserver(observer);
+
   final prefs = await SharedPreferences.getInstance();
 
   // Apply screenshot policy on startup (default: blocked)
